@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong GAME</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="300"></canvas>
+</body>
+
+<script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var palo1 = {
+            up: false,
+            down: false
+    };
+
+    var palo2 = {
+        up: false,
+        down: false
+    };
+    var marcador = {
+        jugador1 : 0,
+        jugador2 : 0
+    }
+
+    window.addEventListener('keyup', function(event){
+        event.preventDefault();
+        console.log(event.key, event.keyCode);
+        if(event.keyCode === 38){
+            palo1.up = false;
+        }
+        if(event.keyCode === 40){
+            palo1.down = false;
+        }
+        if(event.keyCode === 87){
+            palo2.down = false;
+        }
+        if(event.keyCode === 83){
+            palo2.up = false;
+        }
+    });
+
+    window.addEventListener('keydown', function(event){
+        event.preventDefault();
+        console.log(event.key, event.keyCode);
+        if(event.keyCode === 38   ){
+            palo1.up = true;
+        }
+        if(event.keyCode === 40  ){
+            palo1.down = true;
+
+        }
+        if(event.keyCode === 87){
+            palo2.down = true;
+
+        }
+        if(event.keyCode === 83){
+            palo2.up = true;
+
+        }
+    });
+
+    class Pong {
+        constructor(y1, y2, bola_x, bola_y) {
+            this.y1 = y1
+            this.y2 = y2
+            this.bola_x = bola_x
+            this.bola_y = bola_y
+            this.movbolax = 6
+            this.movbolay = 6
+        };
+
+        dibuja() {
+            ctx.beginPath();
+            ctx.fillStyle = 'black';
+            ctx.fillRect(25, this.y1, 20, 100)
+            ctx.fillRect(600-25-20, this.y2, 20, 100)
+
+            ctx.beginPath();
+            ctx.fillStyle = 'magenta';
+            ctx.arc(this.bola_x, this.bola_y, 12,0,2*Math.PI);
+            ctx.fill();
+            this.actualiza();
+
+        }
+        actualiza(){
+            if (palo1.down){
+                this.y1++;
+            }
+            if (palo1.up){
+                this.y1--;
+            }
+            if (palo2.down){
+                this.y2--;
+            }
+            if (palo2.up){
+                this.y2++;
+            }
+            if((this.bola_x+12) > 600){
+                this.movbolax = -this.movbolax
+            }
+            if((this.bola_y+12) > 300){
+                this.movbolay = -this.movbolay
+            }
+            if((this.bola_x-12) < 0){
+                this.movbolax = -this.movbolax
+            }
+            if((this.bola_y-12) < 0){
+                this.movbolay = -this.movbolay
+            }
+
+            this.bola_x = this.bola_x + this.movbolax;
+            this.bola_y = this.bola_y + this.movbolay;
+
+            if(this.bola_x-12 < (45) && (this.bola_y < this.y1+100)){
+                this.movbolax = -this.movbolax
+            }
+            if(this.bola_x+12 > (600-45) && (this.bola_y < this.y2+100)){
+                this.movbolax = -this.movbolax
+            }
+        }
+    }
+
+    function anima(){
+        requestAnimationFrame(anima);
+        ctx.clearRect(0,0, window.innerWidth, window.innerHeight);
+        pong.dibuja();
+    }
+    let pong = new Pong(100,100,300,150);
+    anima();
+
+
+</script>
+
+<style>
+    #canvas {
+        border: 1px solid blue;
+    }
+</style>
+
+</html>

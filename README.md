@@ -1,2 +1,2 @@
-# pingpong-game
+# Pingpong-game
 Simple Pong Game
